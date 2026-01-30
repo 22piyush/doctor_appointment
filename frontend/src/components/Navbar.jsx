@@ -38,7 +38,7 @@ function Navbar() {
               alt="profile_piture"
             />
             <img
-              className="w-2.5"
+              className="w-2.5 transition-transform duration-300 group-hover:rotate-180"
               src={assets.dropdown_icon}
               alt="dropdown_icon"
             />
