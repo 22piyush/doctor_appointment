@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 
@@ -7,6 +7,18 @@ function Doctors() {
   const [filterDoc, setFilterDoc] = useState([]);
 
   const { doctors } = useContext(AppContext);
+
+  const applyFilter =()=>{
+    if(speciality){
+      setFilterDoc(doctors.filter(doc => doc.speciality === speciality))
+    }else{
+      setFilterDoc(doctors)
+    }
+  }
+
+  useEffect(()=>{
+    applyFilter()
+  },[doctors,speciality])
 
   return (
     <div>
@@ -22,7 +34,7 @@ function Doctors() {
         </div>
         <div>
           <div className="w-full grid [grid-template-columns:repeat(auto-fill,minmax(200px,1fr))] gap-4 pt-5 gap-y-6 px-3 sm:px-0">
-            {doctors.slice(0, 10).map((item, index) => (
+            {filterDoc.slice(0, 10).map((item, index) => (
               <div
                 className="border border-blue-200 rounded-xl overflow-hidden cursor-pointer hover:translate-y-[-10px] transition-all duration-500"
                 key={index}
