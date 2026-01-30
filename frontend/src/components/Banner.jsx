@@ -1,7 +1,11 @@
 import React from "react";
 import { assets } from "../assets/assets_frontend/assets";
+import { useNavigate } from "react-router-dom";
 
 function Banner() {
+
+    const navigate = useNavigate();
+
   return (
     <div className="flex bg-[#5F6FFF] rounded-lg px-6 sm:px-10 md:px-14 lg:px-12 my-20 md:mx-10">
       {/* Left Side */}
@@ -10,7 +14,7 @@ function Banner() {
             <h1>Book Appointment</h1>
             <p className="mt-4">with 100+ Trustd Doctors</p>
         </div>
-        <button className="bg-white text-sm sm:text-base text-gray-600 px-8 py-3 rounded-full mt-6 hover:scale-105 transition-all">Create account</button>
+        <button onClick={()=>{ navigate('/login'); scrollTo(0,0)}} className="cursor-pointer bg-white text-sm sm:text-base text-gray-600 px-8 py-3 rounded-full mt-6 hover:scale-105 transition-all">Create account</button>
       </div>
 
       {/* Right Side */}
