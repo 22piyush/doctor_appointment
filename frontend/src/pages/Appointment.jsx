@@ -5,18 +5,38 @@ import { assets } from "../assets/assets_frontend/assets";
 
 function Appointment() {
   const { docId } = useParams();
-  const { doctors , currencySymbol } = useContext(AppContext);
+  const { doctors, currencySymbol } = useContext(AppContext);
 
   const [docInfo, setDocInfo] = useState(null);
+  const [docSloyts, setDocSlots] = useState([]);
+  const [slotIndex, setSlotIndex] = useState(0);
+  const [slotTime, setSlotTime] = useState("");
 
   const fetchDocInfo = async () => {
     const docInfo = doctors.find((doc) => doc._id === docId);
     setDocInfo(docInfo);
   };
 
+  const getAvailabeSlots = async () => {
+    setDocSlots([]);
+
+    // getting current date
+    let today = new Date();
+
+    for (let i = 0; i < 7; i++) {
+      //  getting date with index
+      let currentDate = new Date(today);
+      currentDate.setDate(today.getDate() + i);
+    }
+  };
+
   useEffect(() => {
     fetchDocInfo();
   }, [doctors, docId]);
+
+  useEffect(() => {
+    getAvailabeSlots();
+  }, [docInfo]);
 
   return (
     docInfo && (
@@ -55,11 +75,18 @@ function Appointment() {
               <p className="flex items-center gap-1 text-sm font-medium text-gray-900 mt-3">
                 About <img src={assets.info_icon} alt="info_icon" />
               </p>
-              <p className="text-sm text-gray-500 max-w-[700px] mt-1">{docInfo.about}</p>
+              <p className="text-sm text-gray-500 max-w-[700px] mt-1">
+                {docInfo.about}
+              </p>
             </div>
 
-            <p>Appointment Fee: <span>{currencySymbol}{docInfo.fees}</span></p>
-
+            <p className="text-gray-500 font-medium mt-4">
+              Appointment Fee:{" "}
+              <span className="text-gray-600">
+                {currencySymbol}
+                {docInfo.fees}
+              </span>
+            </p>
           </div>
         </div>
       </div>
