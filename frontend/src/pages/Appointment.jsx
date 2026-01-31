@@ -27,6 +27,19 @@ function Appointment() {
       //  getting date with index
       let currentDate = new Date(today);
       currentDate.setDate(today.getDate() + i);
+
+      // settings and time of the date with index
+      let endTime = new Date();
+      endTime.setDate(today.getDate()+1);
+      endTime.setHours(21,0,0,0);
+
+      // setting Hours 
+      if(today.getDate() == currentDate.getDate()){
+        currentDate.setHours(currentDate.getHours() > 10 ? currentDate.getHours() + 1 : 10)
+        
+      }
+
+
     }
   };
 
