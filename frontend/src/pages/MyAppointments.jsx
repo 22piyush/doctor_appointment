@@ -5,33 +5,51 @@ function MyAppointments() {
   const { doctors } = useContext(AppContext);
 
   return (
-    <div>
-      <p className="pb-3 mt-12 font-medium text-zinc-700 border-b">
+    <div className="max-w-4xl mx-auto px-4">
+      <p className="pb-3 mt-12 font-semibold text-lg text-zinc-700 border-b">
         My Appointments
       </p>
-      <div>
+
+      <div className="mt-6 space-y-5">
         {doctors.slice(0, 2).map((item, index) => (
           <div
-            className="grid grid-cols-[1fr_2fr] gap-4 sm:flex sm:gap-6 py-2 border-b"
             key={index}
+            className="flex flex-col sm:flex-row gap-6 p-4 border border-zinc-200  rounded-lg shadow-sm hover:shadow-md transition"
           >
-            <div>
-              <img src={item.image} alt={`image_${index}`} />
+            {/* Doctor Image */}
+            <div className="flex-shrink-0">
+              <img
+                className="w-32 h-32 object-cover rounded-md bg-indigo-50"
+                src={item.image}
+                alt={`doctor_${index}`}
+              />
             </div>
-            <div>
-              <p>{item.name}</p>
-              <p>{item.speciality}</p>
-              <p>Address:</p>
-              <p>{item.address.line1}</p>
-              <p>{item.address.line2}</p>
-              <p>
-                <span>Date & Time:</span>23, july, 2025| 8:30 PM
+
+            {/* Doctor Info */}
+            <div className="flex-1 text-sm text-zinc-700 space-y-1">
+              <p className="text-base font-semibold">{item.name}</p>
+              <p className="text-indigo-600">{item.speciality}</p>
+
+              <div className="pt-2">
+                <p className="font-medium">Address</p>
+                <p>{item.address.line1}</p>
+                <p>{item.address.line2}</p>
+              </div>
+
+              <p className="pt-2">
+                <span className="font-medium">Date & Time:</span> 23 July, 2025
+                | 8:30 PM
               </p>
             </div>
-            <div></div>
-            <div>
-              <button>Pay Online</button>
-              <button>Cancel appointment</button>
+
+            {/* Actions */}
+            <div className="flex sm:flex-col gap-3 justify-end">
+              <button className="cursor-pointer px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition">
+                Pay Online
+              </button>
+              <button className="cursor-pointer px-4 py-2 text-sm font-medium text-red-600 border border-red-500 rounded-md hover:bg-red-50 transition">
+                Cancel Appointment
+              </button>
             </div>
           </div>
         ))}
