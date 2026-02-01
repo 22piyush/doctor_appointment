@@ -119,6 +119,14 @@ function MyProfile() {
           )}
         </div>
       </div>
+
+      <div>
+        {
+          isEdit 
+          ? <button onClick={()=>setIsEdit(false)}>Save Information</button>
+          : <button  onClick={()=>setIsEdit(true)}>Edit</button>
+        }
+      </div>
     </div>
   );
 }
