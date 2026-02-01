@@ -86,6 +86,26 @@ function MyProfile() {
           )}
         </div>
       </div>
+
+      <div>
+        <p>BASIC INFORMATION</p>
+        <div>
+          <p>Gender:</p>
+          {isEdit ? (
+            <select
+              value={userData.gender}
+              onChange={(e) =>
+                setUserData((prev) => ({ ...prev, gender: e.target.value }))
+              }
+            >
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          ) : (
+            <p>{userData.gender}</p>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
