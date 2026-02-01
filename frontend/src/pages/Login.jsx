@@ -15,6 +15,11 @@ function Login() {
       <div>
         <p>{state === 'Sign Up' ? "Create Account" : "Login"}</p>
         <p>Please {state === 'Sign Up' ? "sign up" : "log in"} to book appointmnt</p>
+
+        <div>
+          <p>Full Name</p>
+          <input type="text" onChange={(e)=> setName(e.target.value)} value={name}/>
+        </div>
       </div>
     </form>
   );
