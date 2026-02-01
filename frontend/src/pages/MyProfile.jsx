@@ -139,7 +139,7 @@ function MyProfile() {
       {/* Button */}
       <button
         onClick={() => setIsEdit(!isEdit)}
-        className={`mt-4 px-4 py-2 rounded-md text-white ${
+        className={`mt-4 px-4 py-2 cursor-pointer text-white rounded-full ${
           isEdit
             ? "bg-green-600 hover:bg-green-700"
             : "bg-blue-600 hover:bg-blue-700"
