@@ -10,7 +10,7 @@ function Contact() {
         </p>
       </div>
 
-      <div className="flex flex-col justify-center md:flex-row gap-10 my-12 text-sm mx-28">
+      <div className="flex flex-col justify-center md:flex-row gap-10 my-12 text-sm md:mx-28">
         <img
           className="w-full md:max-w-[360px]"
           src={assets.contact_image}
