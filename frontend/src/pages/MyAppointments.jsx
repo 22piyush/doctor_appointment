@@ -6,10 +6,15 @@ function MyAppointments() {
 
   return (
     <div>
-      <p>My Appointments</p>
+      <p className="pb-3 mt-12 font-medium text-zinc-700 border-b">
+        My Appointments
+      </p>
       <div>
         {doctors.slice(0, 2).map((item, index) => (
-          <div key={index}>
+          <div
+            className="grid grid-cols-[1fr_2fr] gap-4 sm:flex sm:gap-6 py-2 border-b"
+            key={index}
+          >
             <div>
               <img src={item.image} alt={`image_${index}`} />
             </div>
