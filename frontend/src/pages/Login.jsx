@@ -14,6 +14,7 @@ function Login() {
     <form action="" className="min-h-[80vh] flex items-center">
       <div>
         <p>{state === 'Sign Up' ? "Create Account" : "Login"}</p>
+        <p>Please {state === 'Sign Up' ? "sign up" : "log in"} to book appointmnt</p>
       </div>
     </form>
   );
