@@ -11,7 +11,7 @@ function MyAppointments() {
       </p>
 
       <div className="mt-6 space-y-5">
-        {doctors.slice(0, 2).map((item, index) => (
+        {doctors.slice(0, 3).map((item, index) => (
           <div
             key={index}
             className="flex flex-col sm:flex-row gap-6 p-4 border border-zinc-200  rounded-lg shadow-sm hover:shadow-md transition"
