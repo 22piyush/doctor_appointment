@@ -9,3 +9,5 @@ const connectionCloudinary = async () => {
     });
 
 }
+
+export default connectionCloudinary;
