@@ -6,9 +6,11 @@ import { AdminContext } from "./context/AdminContext";
 
 function App() {
   const { aToken } = useContext(AdminContext);
+  console.log(aToken);
+  
 
   return aToken ? (
-    <div>
+    <div className="bg-blue-50">
       <ToastContainer />
 
     </div>
