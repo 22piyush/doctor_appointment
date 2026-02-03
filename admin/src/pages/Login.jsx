@@ -16,15 +16,20 @@ function Login() {
 
     try {
       if (state === "Admin") {
-
-        const {data} = await axios.post(`${backendUrl}/api/admin/login,`{email,password})
-        if(data.success){
-          console.log(data.token);
-          
+        const { data } = await axios.post(`${backendUrl}/api/admin/login`, {
+          email,
+          password,
+        });
+        if (data.success) {
+          localStorage.setItem('aToken',data.token);
+          setAToken(data.token);
         }
       } else {
+        console.log("1111");
       }
-    } catch (err) {}
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
