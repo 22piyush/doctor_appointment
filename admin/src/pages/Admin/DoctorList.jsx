@@ -2,12 +2,23 @@ import React, { useContext, useEffect } from "react";
 import { AdminContext } from "../../context/AdminContext";
 
 function DoctorList() {
-  const { doctors, aToken, getAllDoctors } = useContext(AdminContext);
+  const { doctors, aToken, getAllDoctors,setDoctors } = useContext(AdminContext);
   console.log(doctors);
 
   useEffect(() => {
     if (aToken) getAllDoctors();
   }, [aToken]);
+
+const toggleAvailability = (_id) => {
+  setDoctors((prev) =>
+    prev.map((doc) =>
+      doc._id === _id
+        ? { ...doc, available: !doc.available }
+        : doc
+    )
+  );
+};
+
 
   return (
     <div className="p-6 min-h-screen w-full">
@@ -24,10 +35,31 @@ function DoctorList() {
                 alt={`image_${index}`}
               />
               <div className="p-4">
-                <div className="flex items-center gap-2 text-sm text-green-500">
-                  <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                <div className="flex items-center gap-3 text-sm">
+                  {/* Checkbox */}
+                  <input
+                    type="checkbox"
+                    checked={item.available}
+                    onChange={() => toggleAvailability(item._id)}
+                    className="w-4 h-4 accent-green-600 cursor-pointer"
+                  />
 
-                  <p>{item.available ? "Available" : "Not Availabe"}</p>
+                  {/* Status Indicator */}
+                  <div
+                    className={`flex items-center gap-2 ${
+                      item.available ? "text-green-500" : "text-red-500"
+                    }`}
+                  >
+                    <span
+                      className={`w-2 h-2 rounded-full ${
+                        item.available
+                          ? "bg-green-500 animate-pulse"
+                          : "bg-red-500"
+                      }`}
+                    ></span>
+
+                    <p>{item.available ? "Available" : "Not Available"}</p>
+                  </div>
                 </div>
 
                 <p className="text-gray-900 text-lg font-medium">{item.name}</p>
