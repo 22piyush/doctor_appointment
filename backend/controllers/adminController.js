@@ -118,7 +118,7 @@ const loginAdmin = async (req, res) => {
             email === process.env.ADMIN_EMAIL &&
             password === process.env.ADMIN_PASSWORD
         ) {
-            const token = jwt.sign(email+password, process.env.JWT_SECRET);
+            const token = jwt.sign(email + password, process.env.JWT_SECRET);
 
             return res.status(200).json({
                 success: true,
@@ -142,4 +142,19 @@ const loginAdmin = async (req, res) => {
     }
 };
 
-export { addDoctor, loginAdmin };
+const allDoctors = async (req, res) => {
+    try {
+
+        const doctors = await doctorModel.find({}).select('-password');
+        res.json({ success: true, doctors })
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({
+            success: false,
+            message: "Server error",
+        });
+    }
+};
+
+export { addDoctor, loginAdmin, allDoctors };
