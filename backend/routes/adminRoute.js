@@ -9,4 +9,6 @@ adminRouter.post('/add-doctor',authAdmin ,upload.single('image'), addDoctor);
 adminRouter.get('/all-doctors',authAdmin, allDoctors);
 adminRouter.post('/login', loginAdmin);
 
+adminRouter.post('/change-availabily',authAdmin,changeAv );
+
 export default adminRouter;

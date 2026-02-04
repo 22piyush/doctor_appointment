@@ -39,3 +39,5 @@ const changeAvailablity = async (req, res) => {
     }
 
 }
+
+export { changeAvailablity };
