@@ -4,9 +4,9 @@ const authAdmin = (req, res, next) => {
     try {
         console.log(req.headers);
 
-        const {authorization} = req.headers;
+        const {aToken} = req.headers;
 
-        if (!authorization) {
+        if (!aToken) {
             return res.status(401).json({
                 success: false,
                 message: "No token provided",
@@ -14,7 +14,7 @@ const authAdmin = (req, res, next) => {
         }
 
         // Verify token
-        const decoded = jwt.verify(authorization, process.env.JWT_SECRET);
+        const decoded = jwt.verify(aToken, process.env.JWT_SECRET);
 
         if (decoded !== process.env.ADMIN_EMAIL + process.env.ADMIN_PASSWORD) {
             return res.status(401).json({
