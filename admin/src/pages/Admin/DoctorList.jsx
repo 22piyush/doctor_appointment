@@ -2,23 +2,12 @@ import React, { useContext, useEffect } from "react";
 import { AdminContext } from "../../context/AdminContext";
 
 function DoctorList() {
-  const { doctors, aToken, getAllDoctors,setDoctors } = useContext(AdminContext);
+  const { doctors, aToken, getAllDoctors,changeAvailability } = useContext(AdminContext);
   console.log(doctors);
 
   useEffect(() => {
     if (aToken) getAllDoctors();
   }, [aToken]);
-
-const toggleAvailability = (_id) => {
-  setDoctors((prev) =>
-    prev.map((doc) =>
-      doc._id === _id
-        ? { ...doc, available: !doc.available }
-        : doc
-    )
-  );
-};
-
 
   return (
     <div className="p-6 min-h-screen w-full">
@@ -26,7 +15,7 @@ const toggleAvailability = (_id) => {
         <div className="w-full grid [grid-template-columns:repeat(auto-fill,minmax(200px,1fr))] gap-4 pt-5 gap-y-6 px-3 sm:px-0">
           {doctors.map((item, index) => (
             <div
-              className="border border-blue-200 rounded-xl overflow-hidden cursor-pointer hover:translate-y-[-10px] transition-all duration-500"
+              className="border border-blue-200 rounded-xl overflow-hidden cursor-pointer hover:shadow-lg"
               key={index}
             >
               <img
@@ -40,7 +29,7 @@ const toggleAvailability = (_id) => {
                   <input
                     type="checkbox"
                     checked={item.available}
-                    onChange={() => toggleAvailability(item._id)}
+                    onChange={(e) => changeAvailability(item._id , e.target.checked)}
                     className="w-4 h-4 accent-green-600 cursor-pointer"
                   />
 

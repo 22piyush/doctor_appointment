@@ -152,7 +152,7 @@ const allDoctors = async (req, res) => {
         console.error(err);
         res.status(500).json({
             success: false,
-            message: "Server error",
+            message: "Server error"
         });
     }
 };
