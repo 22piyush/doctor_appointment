@@ -23,3 +23,24 @@
 .input-field:focus {
   border-color: #2563eb;
 }
+
+/* global.css */
+::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
+
+
+/* global.css */
+.show-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.show-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1; /* gray-300 */
+  border-radius: 6px;
+}
+
+.show-scrollbar::-webkit-scrollbar-track {
+  background-color: #f1f5f9; /* gray-100 */
+}

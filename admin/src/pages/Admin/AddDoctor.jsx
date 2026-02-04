@@ -4,7 +4,7 @@ import { assets } from "../../assets_admin/assets";
 function AddDoctor() {
   return (
     <div className="p-6  min-h-screen w-full">
-      <form className="bg-white max-w-4xl mx-auto p-6 rounded-lg shadow">
+      <form className="bg-white max-w-4xl mx-auto p-6 rounded-lg shadow  max-h-[80vh] show-scrollbar overflow-auto">
         <p className="text-lg font-semibold mb-6">Add Doctor</p>
 
         {/* Image Upload */}
@@ -43,7 +43,7 @@ function AddDoctor() {
 
           <input
             type="text"
-            placeholder="Degree (eg: MBBS)"
+            placeholder="Degree Education (eg: MBBS)"
             className="input-field"
           />
 
