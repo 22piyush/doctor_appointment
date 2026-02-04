@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 
@@ -17,9 +17,13 @@ const AppContextProvider = (props) => {
         setDoctors(data.doctors)
       }
     } catch (err) {
-      return toast.error(err);
+      toast.error(err || "Some error occures");
     }
   };
+
+  useEffect(()=>{
+    getDoctorsData();
+  },[])
 
   const value = {
     doctors,
