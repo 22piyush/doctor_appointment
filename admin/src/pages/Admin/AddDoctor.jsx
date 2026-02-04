@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { assets } from "../../assets_admin/assets";
 import { AdminContext } from "../../context/AdminContext";
 import { toast } from "react-toastify";
-import axios from 'axios'
+import axios from "axios";
 
 function AddDoctor() {
   const [docImg, setDocImg] = useState(false);
@@ -18,6 +18,8 @@ function AddDoctor() {
   const [address2, setAddress2] = useState("");
 
   const { backendUrl, aToken } = useContext(AdminContext);
+
+  console.log(aToken, "333333333333");
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
@@ -49,18 +51,44 @@ function AddDoctor() {
       formData.append("degree", degree);
 
       // Address (nested)
-      formData.append("address", JSON.stringify({ line1: address1, line2: address2 }));
-
+      formData.append(
+        "address",
+        JSON.stringify({ line1: address1, line2: address2 }),
+      );
 
       formData.forEach((value, key) => {
         console.log(`${key}: ${value}`);
-        
-      })
-      
-      const data = await axios.post(`${backendUrl}/api/admin/add-doctor`, formData, {headers:{aToken}})
-      
+      });
 
+      const { data } = await axios.post(
+        `${backendUrl}/api/admin/add-doctor`,
+        formData,
+        {
+          headers: { aToken },
+        },
+      );
 
+      if (data.success) {
+        toast.success(data.message);
+        // reset image
+        setDocImg(null);
+
+        // reset text fields
+        setName("");
+        setEmail("");
+        setSpeciality("");
+        setDegree("");
+        setExperience("");
+        setFees("");
+        setAbout("");
+
+        // reset address
+        setAddress1("");
+        setAddress2("");
+        document.getElementById("doc-img").value = "";
+      } else {
+        toast.error(data.message);
+      }
     } catch (err) {
       return toast.error(err);
     }
