@@ -116,4 +116,25 @@ const loginUser = async (req, res) => {
     }
 };
 
-export { registerUser, loginUser };
+
+const getProfile = async (req, res) => {
+
+    try {
+        const { userId } = req.body;
+        const userData = await userModel.findById(userId).select('-password')
+        res.status(200).json({
+            success: true,
+            userData,
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            message: "Server error",
+        });
+    }
+
+}
+
+
+export { registerUser, loginUser, getProfile };
