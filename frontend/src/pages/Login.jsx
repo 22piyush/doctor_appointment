@@ -1,9 +1,11 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../context/AppContext";
+import { Navigate, useNavigate } from "react-router-dom";
 
 function Login() {
 
-  const { state, setState, registerLoginUser } = useContext(AppContext);
+  const { state, setState, registerLoginUser, token } = useContext(AppContext);
+  const navigate = useNavigate()
 
   
   const [email, setEmail] = useState("");
@@ -14,6 +16,12 @@ function Login() {
     event.preventDefault();
     registerLoginUser(name , email, password)
   };
+
+useEffect(() => {
+  if (token) {
+    navigate("/");
+  }
+}, [token, navigate]);
 
   return (
     <form  className="min-h-[80vh] flex items-center">

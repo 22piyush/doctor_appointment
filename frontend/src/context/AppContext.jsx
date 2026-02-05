@@ -34,8 +34,8 @@ const AppContextProvider = (props) => {
         });
 
         if (data.success) {
-          localStorage.setItem("token", data.token);
-          setToken(data.token);
+          // localStorage.setItem("token", data.token);
+          // setToken(data.token);
           toast.success(data.message);
         } else {
           toast.error(data.message || "Some error occurred");
