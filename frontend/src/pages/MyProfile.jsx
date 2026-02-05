@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import { AppContext } from "../context/AppContext";
+import { assets } from "../assets/assets_frontend/assets";
 
 function MyProfile() {
   const { userData, setUserData, token, backendUrl, loadUserProfileData } =
@@ -15,12 +16,37 @@ function MyProfile() {
     userData && (
       <div className="max-w-lg mx-auto p-5 flex flex-col gap-4 text-sm bg-white rounded-lg shadow">
         {isEdit ? (
-          <label htmlFor="">
-            <div>
-              <img src="" alt="" />
-              <img src="" alt="" />
-            </div>
-            <input type="file" is="image" hidden />
+          <label
+            htmlFor="image"
+            className="relative cursor-pointer self-center"
+          >
+            {/* Profile Image */}
+            <img
+              src={image ? URL.createObjectURL(image) : userData.image}
+              alt="profile"
+              className={`w-36 h-36 rounded-full object-cover transition ${
+                isEdit ? "blur-sm opacity-80" : ""
+              }`}
+            />
+
+            {/* Upload Icon Overlay */}
+            {isEdit && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <img
+                  src={assets.upload_icon}
+                  alt="upload"
+                  className="h-20 p-2 rounded-full shadow"
+                />
+              </div>
+            )}
+
+            <input
+              type="file"
+              id="image"
+              hidden
+              accept="image/*"
+              onChange={(e) => setImage(e.target.files[0])}
+            />
           </label>
         ) : (
           <img
