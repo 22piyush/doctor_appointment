@@ -59,6 +59,8 @@ const AppContextProvider = (props) => {
     }
   };
 
+  // const userProfileData
+
   const value = {
     doctors,
     currencySymbol,

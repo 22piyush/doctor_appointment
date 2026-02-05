@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import userModel from "../models/userModel.js";
 import jwt from "jsonwebtoken"
+import { v2 as cloudinary } from 'cloudinary';
 
 
 const registerUser = async (req, res) => {
@@ -116,7 +117,6 @@ const loginUser = async (req, res) => {
     }
 };
 
-
 const getProfile = async (req, res) => {
 
     try {
@@ -134,7 +134,52 @@ const getProfile = async (req, res) => {
         });
     }
 
-}
+};
+
+const updateProfile = async (req, res) => {
+    try {
+        const { userId, name, phone, address, dob, gender } = req.body;
+        const imageFile = req.file;
+
+        if (!userId || !name || !phone || !address || !dob || !gender) {
+            return res.status(400).json({
+                success: false,
+                message: "Data Missing",
+            });
+        }
+
+        const parsedAddress = JSON.parse(address);
+
+        await userModel.findByIdAndUpdate(
+            userId,
+            { name, phone, address: parsedAddress, dob, gender },
+            { new: true }
+        );
+
+        if (imageFile) {
+            const imageUpload = await cloudinary.uploader.upload(
+                imageFile.path,
+                { resource_type: "image" }
+            );
+
+            await userModel.findByIdAndUpdate(userId, {
+                image: imageUpload.secure_url,
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Profile updated successfully",
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            message: "Server error",
+        });
+    }
+};
 
 
-export { registerUser, loginUser, getProfile };
+export { registerUser, loginUser, getProfile, updateProfile };
