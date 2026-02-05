@@ -7,6 +7,8 @@ function TopDoctors() {
     const navigate = useNavigate();
 
     const {doctors} = useContext(AppContext)
+    console.log(doctors);
+    
 
   return (
     <div className="flex flex-col items-center gap-4 my-16 text-gray-900 md:mx-10">
@@ -15,7 +17,7 @@ function TopDoctors() {
         Simply browse through our extensive list of trusted doctors.
       </p>
       <div className="w-full grid [grid-template-columns:repeat(auto-fill,minmax(200px,1fr))] gap-4 pt-5 gap-y-6 px-3 sm:px-0">
-        {doctors.slice(0, 10).map((item, index) => (
+        {doctors?.map((item, index) => (
           <div
            onClick={() => {navigate(`/appointment/${item._id}`); scrollTo(0,0)}}
             className="border border-blue-200 rounded-xl overflow-hidden cursor-pointer hover:translate-y-[-10px] transition-all duration-500"

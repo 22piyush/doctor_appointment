@@ -14,7 +14,9 @@ const AppContextProvider = (props) => {
     try {
       const { data } = await axios.get(`${backendUrl}/api/doctor/list`);
       if(data.success){
-        setDoctors(data.doctors)
+        console.log(data,"111111111111");
+        
+        setDoctors(data.data)
       }
     } catch (err) {
       toast.error(err || "Some error occures");
