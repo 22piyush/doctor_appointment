@@ -120,7 +120,7 @@ const loginUser = async (req, res) => {
 const getProfile = async (req, res) => {
 
     try {
-        const { userId } = req.body;
+        const userId = req.userId;
         const userData = await userModel.findById(userId).select('-password')
         res.status(200).json({
             success: true,
