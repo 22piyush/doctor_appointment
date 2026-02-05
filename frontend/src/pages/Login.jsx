@@ -1,17 +1,22 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { AppContext } from "../context/AppContext";
 
 function Login() {
-  const [state, setState] = useState("Sign Up");
+
+  const { state, setState, registerLoginUser } = useContext(AppContext);
+
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
+    registerLoginUser(name , email, password)
   };
 
   return (
-    <form action="" className="min-h-[80vh] flex items-center">
+    <form  className="min-h-[80vh] flex items-center">
       <div className="flex flex-col gap-3 m-auto items-center p-8 min-w-[340px] sm:min-w-96 border rounded-xl text-zinc-600 text-sm shadow-lg">
         <p className="text-2xl font-semibold">
           {state === "Sign Up" ? "Create Account" : "Login"}
@@ -53,7 +58,7 @@ function Login() {
           />
         </div>
 
-        <button className="bg-[#5F6FFF] text-white w-full py-2 rounded-md text-base">
+        <button onClick={onSubmitHandler} className="bg-[#5F6FFF] text-white w-full py-2 rounded-md text-base">
           {state === "Sign Up" ? "Create Account" : "Login"}
         </button>
 

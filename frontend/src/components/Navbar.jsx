@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { assets } from "../assets/assets_frontend/assets";
 import { NavLink, useNavigate } from "react-router-dom";
+import { AppContext } from "../context/AppContext";
 
 function Navbar() {
   const navigate = useNavigate();
 
   const [showMenu, setShowMenu] = useState(false);
-  const [token, setToken] = useState(true);
+
+  const { token, setToken } = useContext(AppContext);
 
   return (
     <div className="flex items-center justify-between text-sm py-4 mb-5 border-b border-b-gray-400">
@@ -64,7 +66,10 @@ function Navbar() {
                   My Appointments
                 </p>
                 <p
-                  onClick={() => setToken(false)}
+                  onClick={() => {
+                    setToken("");
+                    localStorage.removeItem("token");
+                  }}
                   className="hover:text-black cursor-pointer"
                 >
                   Logout
@@ -93,7 +98,7 @@ function Navbar() {
           className={`${showMenu ? "fixed w-full" : "h-0 w-0"} md:hidden right-0 top-0 bottom-0 z-20 overflow-hidden bg-white transition-all duration-300 absolute`}
         >
           <div className="flex items-center justify-between px-5 py-6">
-            <img src={assets.logo} alt="logo" className="w-44"/>
+            <img src={assets.logo} alt="logo" className="w-44" />
             <img
               className="w-7 cursor-pointer"
               onClick={() => setShowMenu(false)}
