@@ -187,6 +187,9 @@ const updateProfile = async (req, res) => {
 const bookAppointment = async (req, res) => {
     try {
 
+        console.log(req,"reqqqqqqqqqqqqqqqqqqqqqqqqqq");
+        console.log(req.body,"req.bodyyyyyyyyyyyyy");
+
         const { docId, slotDate, slotTime } = req.body;
         const userId = req.userId;
 
