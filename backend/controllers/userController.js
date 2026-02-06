@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken"
 import { v2 as cloudinary } from 'cloudinary';
 import doctorModel from "../models/doctorModel.js";
 import appointmentModel from "../models/appointModel.js";
+import razorpay from "razorpay"
 
 
 const registerUser = async (req, res) => {
@@ -278,8 +279,6 @@ const listAppointment = async (req, res) => {
 }
 
 
-
-
 const cancelAppointment = async (req, res) => {
     try {
 
@@ -323,4 +322,40 @@ const cancelAppointment = async (req, res) => {
 }
 
 
-export { registerUser, loginUser, getProfile, updateProfile, bookAppointment, listAppointment, cancelAppointment };
+const payment = async (req, res) => {
+
+    try {
+
+        const userId = req.userId;
+        const { appointmentId } = req.body;
+
+        const appointmentData = await appointmentModel.findById(appointmentId)
+
+        if (appointmentData.userId !== userId) {
+            res.status(400).json({
+                success: false,
+                message: "Unauthorized action",
+            });
+        }
+
+
+        await appointmentModel.findByIdAndUpdate(appointmentId, { payment: true , isCompleted: true });
+
+        res.status(200).json({
+            success: true,
+            message: "Appointment Booked Successful",
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            message: "Server error",
+        });
+    }
+
+}
+
+
+
+export { registerUser, loginUser, getProfile, updateProfile, bookAppointment, listAppointment, cancelAppointment, payment };

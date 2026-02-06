@@ -48,6 +48,28 @@ function MyAppointments() {
     }
   };
 
+  const makePayment = async (appointmentId) => {
+    try {
+      const { data } = await axios.post(
+        `${backendUrl}/api/user/payment`,
+        { appointmentId },
+        {
+          headers: { token },
+        },
+      );
+
+      if (data.success) {
+        toast.success(data?.message);
+        getUserAppointments();
+        getDoctorsData();
+      } else {
+        toast.error(data?.message || "Server error");
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Server error");
+    }
+  };
+
   const formatSlotDate = (slotDate) => {
     const [day, month, year] = slotDate.split("_");
     return new Date(year, month - 1, day).toDateString();
@@ -119,7 +141,10 @@ function MyAppointments() {
             {/* Actions */}
             <div className="flex sm:flex-col gap-3 justify-end">
               {!item.payment && !item.cancelled && (
-                <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
+                <button
+                  onClick={() => makePayment(item._id)}
+                  className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
+                >
                   Pay Online
                 </button>
               )}
