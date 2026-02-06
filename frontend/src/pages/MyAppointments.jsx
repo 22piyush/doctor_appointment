@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { useEffect } from "react";
 
 function MyAppointments() {
-  const { backendUrl, token } = useContext(AppContext);
+  const { backendUrl, token, getDoctorsData } = useContext(AppContext);
 
   const [appointments, setAppointments] = useState([]);
 
@@ -28,12 +28,18 @@ function MyAppointments() {
 
   const cancelAppointments = async (appointmentId) => {
     try {
-      const { data } = await axios.post(`${backendUrl}/api/user/cancel-appointments`,{appointmentId} ,{
-        headers: { token },
-      });
+      const { data } = await axios.post(
+        `${backendUrl}/api/user/cancel-appointments`,
+        { appointmentId },
+        {
+          headers: { token },
+        },
+      );
 
       if (data.success) {
+        toast.success(data?.message);
         getUserAppointments();
+        getDoctorsData();
       } else {
         toast.error(data?.message || "Server error");
       }
@@ -91,11 +97,22 @@ function MyAppointments() {
 
               <p className="pt-1">
                 <span className="font-medium">Status:</span>{" "}
-                {item.cancelled
-                  ? "Cancelled"
-                  : item.isCompleted
-                    ? "Completed"
-                    : "Upcoming"}
+                <span
+                  className={`px-2 py-1 text-xs font-semibold rounded-full border
+      ${
+        item.cancelled
+          ? "text-red-600 border-red-600 bg-red-50"
+          : item.isCompleted
+            ? "text-green-600 border-green-600 bg-green-50"
+            : "text-yellow-600 border-yellow-600 bg-yellow-50"
+      }`}
+                >
+                  {item.cancelled
+                    ? "Cancelled"
+                    : item.isCompleted
+                      ? "Completed"
+                      : "Upcoming"}
+                </span>
               </p>
             </div>
 
@@ -108,7 +125,10 @@ function MyAppointments() {
               )}
 
               {!item.cancelled && !item.isCompleted && (
-                <button onClick={()=>cancelAppointments(item._id)} className="px-4 py-2 text-sm font-medium text-red-600 border border-red-500 rounded-md hover:bg-red-50">
+                <button
+                  onClick={() => cancelAppointments(item._id)}
+                  className="px-4 py-2 text-sm font-medium text-red-600 border border-red-500 rounded-md hover:bg-red-50"
+                >
                   Cancel Appointment
                 </button>
               )}
