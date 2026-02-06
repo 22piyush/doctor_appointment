@@ -25,7 +25,7 @@ function Appointment() {
     setDocInfo(docInfo);
   };
 
-  const getAvailableSlots = async () => {
+  const getAvailableSlots = () => {
     const today = new Date();
     const days = [];
 
@@ -33,37 +33,40 @@ function Appointment() {
       const dayDate = new Date(today);
       dayDate.setDate(today.getDate() + i);
 
-      let currentDate = new Date(dayDate);
+      const slotDate = `${dayDate.getDate()}_${dayDate.getMonth() + 1}_${dayDate.getFullYear()}`;
+
+      let currentTime = new Date(dayDate);
       const endTime = new Date(dayDate);
       endTime.setHours(21, 0, 0, 0);
 
+      // start time logic
       if (today.toDateString() === dayDate.toDateString()) {
         const now = new Date();
-        currentDate.setHours(now.getHours());
-        currentDate.setMinutes(now.getMinutes() < 30 ? 30 : 0);
-
-        if (now.getMinutes() >= 30) {
-          currentDate.setHours(currentDate.getHours() + 1);
-        }
-
-        if (currentDate.getHours() < 10) {
-          currentDate.setHours(10, 0, 0, 0);
-        }
+        currentTime.setHours(Math.max(now.getHours(), 10));
+        currentTime.setMinutes(now.getMinutes() < 30 ? 30 : 0);
       } else {
-        currentDate.setHours(10, 0, 0, 0);
+        currentTime.setHours(10, 0, 0, 0);
       }
 
       const slots = [];
 
-      while (currentDate < endTime) {
-        slots.push({
-          datetime: new Date(currentDate),
-          time: currentDate.toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
+      while (currentTime < endTime) {
+        const timeString = currentTime.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
         });
-        currentDate.setMinutes(currentDate.getMinutes() + 30);
+
+        // 🔥 ONLY THIS CHECK MATTERS
+        const isBooked = docInfo?.slots_booked?.[slotDate]?.includes(slotTime);
+
+        if (!isBooked) {
+          slots.push({
+            datetime: new Date(currentTime),
+            time: timeString,
+          });
+        }
+
+        currentTime.setMinutes(currentTime.getMinutes() + 30);
       }
 
       days.push({ date: dayDate, slots });
@@ -71,11 +74,11 @@ function Appointment() {
 
     setDocSlots(days);
 
-    // ✅ AUTO SELECT FIRST DAY WITH SLOTS
-    const firstAvailableDay = days.findIndex((day) => day.slots.length > 0);
-    if (firstAvailableDay !== -1) {
-      setSlotIndex(firstAvailableDay);
-      setSlotTime(days[firstAvailableDay].slots[0]);
+    // auto select first available slot
+    const firstDay = days.findIndex((d) => d.slots.length > 0);
+    if (firstDay !== -1) {
+      setSlotIndex(firstDay);
+      setSlotTime(days[firstDay].slots[0]);
     }
   };
 
