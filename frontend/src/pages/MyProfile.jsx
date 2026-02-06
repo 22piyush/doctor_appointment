@@ -1,6 +1,8 @@
 import React, { useContext, useState } from "react";
 import { AppContext } from "../context/AppContext";
 import { assets } from "../assets/assets_frontend/assets";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 function MyProfile() {
   const { userData, setUserData, token, backendUrl, loadUserProfileData } =
@@ -8,6 +10,35 @@ function MyProfile() {
   const [isEdit, setIsEdit] = useState(false);
 
   const [image, setImage] = useState(false);
+
+  const updateUserProfileData = async () => {
+    try {
+      const formData = new FormData();
+
+      formData.append("name", userData.name);
+      formData.append("phone", userData.phone);
+      formData.append("address", JSON.stringify(userData.address));
+      formData.append("gender", userData.gender);
+      formData.append("dob", userData.dob);
+
+      image && formData.append("image", image);
+
+      const { data } = await axios.post(
+        `${backendUrl}/api/user/update-profile`,
+        formData,
+        { headers: { token } },
+      );
+
+      if (data.success) {
+        toast.success(data.message);
+        await loadUserProfileData();
+        setIsEdit(false);
+        setImage(false);
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Server error");
+    }
+  };
 
   const inputStyle =
     "w-full mt-1 px-3 py-2 border border-gray-300 rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500";
@@ -137,13 +168,14 @@ function MyProfile() {
           {isEdit ? (
             <select
               className={inputStyle}
-              value={userData.gender}
+              value={userData.gender || ""}
               onChange={(e) =>
                 setUserData((prev) => ({ ...prev, gender: e.target.value }))
               }
             >
-              <option>Male</option>
-              <option>Female</option>
+              <option value="">Select Gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
             </select>
           ) : (
             <p>{userData.gender}</p>
@@ -166,7 +198,12 @@ function MyProfile() {
 
         {/* Button */}
         <button
-          onClick={() => setIsEdit(!isEdit)}
+          onClick={() => {
+            if (isEdit) {
+              updateUserProfileData(); // run only on Save
+            }
+            setIsEdit(!isEdit);
+          }}
           className={`mt-4 px-4 py-2 cursor-pointer text-white rounded-full ${
             isEdit
               ? "bg-green-600 hover:bg-green-700"

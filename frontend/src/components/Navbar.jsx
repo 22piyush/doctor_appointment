@@ -8,7 +8,7 @@ function Navbar() {
 
   const [showMenu, setShowMenu] = useState(false);
 
-  const { token, setToken, userData, setUserData } = useContext(AppContext);
+  const { token, setToken, userData} = useContext(AppContext);
 
   return (
     <div className="flex items-center justify-between text-sm py-4 mb-5 border-b border-b-gray-400">
@@ -43,7 +43,7 @@ function Navbar() {
           <div className="flex items-center gap-2 cursor-pointer group relative">
             <img
               className="w-8 rounded-full"
-              src={assets.profile_pic}
+              src={userData.image}
               alt="profile_piture"
             />
             <img
