@@ -187,8 +187,8 @@ const updateProfile = async (req, res) => {
 const bookAppointment = async (req, res) => {
     try {
 
-        console.log(req,"reqqqqqqqqqqqqqqqqqqqqqqqqqq");
-        console.log(req.body,"req.bodyyyyyyyyyyyyy");
+        console.log(req, "reqqqqqqqqqqqqqqqqqqqqqqqqqq");
+        console.log(req.body, "req.bodyyyyyyyyyyyyy");
 
         const { docId, slotDate, slotTime } = req.body;
         const userId = req.userId;
@@ -254,4 +254,30 @@ const bookAppointment = async (req, res) => {
     }
 }
 
-export { registerUser, loginUser, getProfile, updateProfile, bookAppointment };
+
+
+const listAppointment = async (req, res) => {
+    try {
+
+        const userId = req.userId;
+
+        const appointments = await appointmentModel.find({ userId })
+
+        res.status(200).json({
+            success: true,
+            appointments,
+        });
+
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            message: "Server error",
+        });
+    }
+}
+
+
+
+export { registerUser, loginUser, getProfile, updateProfile, bookAppointment, listAppointment };
