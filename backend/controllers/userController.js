@@ -255,7 +255,6 @@ const bookAppointment = async (req, res) => {
 }
 
 
-
 const listAppointment = async (req, res) => {
     try {
 
@@ -280,4 +279,48 @@ const listAppointment = async (req, res) => {
 
 
 
-export { registerUser, loginUser, getProfile, updateProfile, bookAppointment, listAppointment };
+
+const cancelAppointment = async (req, res) => {
+    try {
+
+        const userId = req.userId;
+        const { appointmentId } = req.body;
+
+        const appointmentData = await appointmentModel.findById(appointmentId)
+
+        if (appointmentData.userId !== userId) {
+            res.status(400).json({
+                success: false,
+                message: "Unauthorized action",
+            });
+        }
+
+
+        await appointmentModel.findByIdAndUpdate(appointmentId, { cancelled: true });
+
+        const { docId, slotDate, slotTime } = appointmentData;
+
+        const doctorData = await doctorModel.findById(docId);
+
+        let slots_booked = doctorData.slots_booked;
+
+        slots_booked[slotDate] = slots_booked[slotDate].filter(e => e !== slotTime);
+
+        await doctorModel.findByIdAndUpdate(docId, { slots_booked })
+
+        res.status(200).json({
+            success: true,
+            message: "Appointment Cancelled",
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            message: "Server error",
+        });
+    }
+}
+
+
+export { registerUser, loginUser, getProfile, updateProfile, bookAppointment, listAppointment, cancelAppointment };

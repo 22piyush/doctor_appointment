@@ -26,11 +26,32 @@ function MyAppointments() {
     }
   };
 
-  useEffect(()=>{
-    if(token){
+  const cancelAppointments = async (appointmentId) => {
+    try {
+      const { data } = await axios.post(`${backendUrl}/api/user/cancel-appointments`,{appointmentId} ,{
+        headers: { token },
+      });
+
+      if (data.success) {
+        getUserAppointments();
+      } else {
+        toast.error(data?.message || "Server error");
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Server error");
+    }
+  };
+
+  const formatSlotDate = (slotDate) => {
+    const [day, month, year] = slotDate.split("_");
+    return new Date(year, month - 1, day).toDateString();
+  };
+
+  useEffect(() => {
+    if (token) {
       getUserAppointments();
     }
-  },[token])
+  }, [token]);
 
   return (
     <div className="max-w-4xl mx-auto px-4">
@@ -39,45 +60,58 @@ function MyAppointments() {
       </p>
 
       <div className="mt-6 space-y-5">
-        {appointments.map((item, index) => (
+        {appointments.map((item) => (
           <div
-            key={index}
-            className="flex flex-col sm:flex-row gap-6 p-4 border border-zinc-200  rounded-lg shadow-sm hover:shadow-md transition"
+            key={item._id}
+            className="flex flex-col sm:flex-row gap-6 p-4 border border-zinc-200 rounded-lg shadow-sm hover:shadow-md transition"
           >
             {/* Doctor Image */}
             <div className="flex-shrink-0">
               <img
                 className="w-32 h-32 object-cover rounded-md bg-indigo-50"
-                src={item.image}
-                alt={`doctor_${index}`}
+                src={item.docData.image}
+                alt="doctor"
               />
             </div>
 
             {/* Doctor Info */}
             <div className="flex-1 text-sm text-zinc-700 space-y-1">
-              <p className="text-base font-semibold">{item.name}</p>
-              <p className="text-indigo-600">{item.speciality}</p>
+              <p className="text-base font-semibold">{item.docData.name}</p>
+              <p className="text-indigo-600">{item.docData.speciality}</p>
 
               <div className="pt-2">
                 <p className="font-medium">Address</p>
-                <p>{item.address.line1}</p>
-                <p>{item.address.line2}</p>
+                <p>{item.docData.address}</p>
               </div>
 
               <p className="pt-2">
-                <span className="font-medium">Date & Time:</span> 23 July, 2025
-                | 8:30 PM
+                <span className="font-medium">Date & Time:</span>{" "}
+                {formatSlotDate(item.slotDate)} | {item.slotTime}
+              </p>
+
+              <p className="pt-1">
+                <span className="font-medium">Status:</span>{" "}
+                {item.cancelled
+                  ? "Cancelled"
+                  : item.isCompleted
+                    ? "Completed"
+                    : "Upcoming"}
               </p>
             </div>
 
             {/* Actions */}
             <div className="flex sm:flex-col gap-3 justify-end">
-              <button className="cursor-pointer px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition">
-                Pay Online
-              </button>
-              <button className="cursor-pointer px-4 py-2 text-sm font-medium text-red-600 border border-red-500 rounded-md hover:bg-red-50 transition">
-                Cancel Appointment
-              </button>
+              {!item.payment && !item.cancelled && (
+                <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
+                  Pay Online
+                </button>
+              )}
+
+              {!item.cancelled && !item.isCompleted && (
+                <button onClick={()=>cancelAppointments(item._id)} className="px-4 py-2 text-sm font-medium text-red-600 border border-red-500 rounded-md hover:bg-red-50">
+                  Cancel Appointment
+                </button>
+              )}
             </div>
           </div>
         ))}
