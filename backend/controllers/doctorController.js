@@ -101,8 +101,11 @@ const loginDoctor = async (req, res) => {
 
 const appointmentsDoctor = async (req, res) => {
     try {
+        console.log(req, "2222222222222222222");
 
-        const { docId } = req.docId;
+        const docId = req.docId;
+        console.log(docId, "Controllerr");
+
         const appointments = await appointmentModel.find({ docId })
 
         res.status(200).json({
