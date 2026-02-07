@@ -183,4 +183,43 @@ const appointmentCancel = async (req, res) => {
 }
 
 
+
+const doctorDashboard = async (req, res) => {
+    try {
+
+        const docId = req.docId;
+
+        const appointments = await appointmentModel.find({ docId });
+
+        let earnings = 0;
+
+        appointments.map((item) => {
+            if (item.isCompleted || item.payment) {
+                earnings += item.amount
+            }
+        });
+
+        let patients = [];
+
+        appointments.map((item) => {
+            if (!patients.includes(item.userId)) {
+                patients.push(item.userId);
+            }
+        })
+
+        const dashData = {
+            earnings,
+            appointments,
+            patients
+        }
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Invalid Credentials"
+        });
+    }
+}
+
+
 export { changeAvailablity, allDoctorsList, loginDoctor, appointmentsDoctor, appointmentsComplete, appointmentCancel };
