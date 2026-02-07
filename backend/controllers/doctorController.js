@@ -253,13 +253,13 @@ const updateDoctorProfile = async (req, res) => {
     try {
 
         const docId = req.docId;
-       const { fees, address, available } = req.body;
+        const { fees, address, available } = req.body;
 
-       
+        await doctorModel.findByIdAndUpdate(docId, { fees, address, available })
 
         res.status(200).json({
             success: true,
-            profileData
+            message: "Profile updated successfully"
         });
 
     } catch (error) {
@@ -271,4 +271,4 @@ const updateDoctorProfile = async (req, res) => {
 }
 
 
-export { changeAvailablity, allDoctorsList, loginDoctor, appointmentsDoctor, appointmentsComplete, appointmentCancel, doctorDashboard, doctorProfile };
+export { changeAvailablity, allDoctorsList, loginDoctor, appointmentsDoctor, appointmentsComplete, appointmentCancel, doctorDashboard, doctorProfile, updateDoctorProfile };
