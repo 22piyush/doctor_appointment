@@ -159,12 +159,12 @@ const allDoctors = async (req, res) => {
 };
 
 
-const appointmentsAdmin = async (req, res){
+const appointmentsAdmin = async (req, res) => {
 
     try {
 
         const appointments = await appointmentModel.find({});
-        res.json({ success: true, doctors });
+        res.json({ success: true, appointments });
 
     } catch (err) {
         console.error(err);
@@ -176,4 +176,46 @@ const appointmentsAdmin = async (req, res){
 
 }
 
-export { addDoctor, loginAdmin, allDoctors, appointmentsAdmin };
+
+const appointmentCancel = async (req, res) => {
+    try {
+
+        const { appointmentId } = req.body;
+
+        const appointmentData = await appointmentModel.findById(appointmentId)
+
+        if (appointmentData.userId !== userId) {
+            res.status(400).json({
+                success: false,
+                message: "Unauthorized action",
+            });
+        }
+
+
+        await appointmentModel.findByIdAndUpdate(appointmentId, { cancelled: true });
+
+        const { docId, slotDate, slotTime } = appointmentData;
+
+        const doctorData = await doctorModel.findById(docId);
+
+        let slots_booked = doctorData.slots_booked;
+
+        slots_booked[slotDate] = slots_booked[slotDate].filter(e => e !== slotTime);
+
+        await doctorModel.findByIdAndUpdate(docId, { slots_booked })
+
+        res.status(200).json({
+            success: true,
+            message: "Appointment Cancelled",
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            message: "Server error",
+        });
+    }
+}
+
+export { addDoctor, loginAdmin, allDoctors, appointmentsAdmin, appointmentCancel };
