@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { AdminContext } from "../context/AdminContext";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { doctorContext } from "../context/DoctorContext";
 
 function Login() {
   const [state, setState] = useState("Admin");
@@ -10,6 +11,7 @@ function Login() {
   const [password, setPassword] = useState("");
 
   const { setAToken, backendUrl } = useContext(AdminContext);
+  const { setDToken } = useContext(doctorContext);
 
   const onSubmitHadler = async (e) => {
     e.preventDefault();
@@ -23,6 +25,19 @@ function Login() {
         if (data.success) {
           localStorage.setItem("aToken", data.token);
           setAToken(data.token);
+          toast.success("Login successful");
+        } else {
+          toast.error(data.message);
+        }
+      } else {
+        const { data } = await axios.post(`${backendUrl}/api/doctor/login`, {
+          email,
+          password,
+        });
+
+        if (data.success) {
+          localStorage.setItem("dToken", data.token);
+          setDToken(data.token);
           toast.success("Login successful");
         } else {
           toast.error(data.message);
@@ -49,7 +64,7 @@ function Login() {
             type="email"
             required
             value={email}
-             autoComplete="email"
+            autoComplete="email"
             onChange={(e) => setEmail(e.target.value)}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Enter your email"
