@@ -35,7 +35,7 @@ function App() {
       <Navbar />
 
       <div className="flex items-start">
-        
+        <Sidebar />
 
         <Routes>
           {/* DEFAULT REDIRECT */}
