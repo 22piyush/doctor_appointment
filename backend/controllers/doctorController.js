@@ -210,8 +210,14 @@ const doctorDashboard = async (req, res) => {
         const dashData = {
             earnings,
             appointments,
-            patients
+            patients,
+            latestAppointments: appointments.reverse().slice(0, 5)
         }
+
+        res.status(200).json({
+            success: true,
+            dashData
+        });
 
     } catch (error) {
         res.status(500).json({
@@ -222,4 +228,4 @@ const doctorDashboard = async (req, res) => {
 }
 
 
-export { changeAvailablity, allDoctorsList, loginDoctor, appointmentsDoctor, appointmentsComplete, appointmentCancel };
+export { changeAvailablity, allDoctorsList, loginDoctor, appointmentsDoctor, appointmentsComplete, appointmentCancel,doctorDashboard };
