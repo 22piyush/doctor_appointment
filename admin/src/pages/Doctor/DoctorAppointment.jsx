@@ -4,8 +4,14 @@ import { AppContext } from "../../context/AppContext";
 import { assets } from "../../assets_admin/assets";
 
 function DoctorAppointment() {
-  const { getAppointments, appointments, dToken } = useContext(doctorContext);
-    const { calculateAge } = useContext(AppContext);
+  const {
+    getAppointments,
+    appointments,
+    dToken,
+    completeAppointment,
+    cancelAppointment,
+  } = useContext(doctorContext);
+  const { calculateAge } = useContext(AppContext);
 
   useEffect(() => {
     if (dToken) {
@@ -106,12 +112,20 @@ function DoctorAppointment() {
                           Completed
                         </span>
                       ) : (
-                        <img
-                          onClick={() => cancelAppointment(item._id)}
-                          className="w-8 cursor-pointer hover:scale-110 transition"
-                          src={assets.cancel_icon}
-                          alt="cancel"
-                        />
+                        <div className="flex items-center gap-2">
+                          <img
+                            onClick={() => cancelAppointment(item._id)}
+                            className="w-8 cursor-pointer hover:scale-110 transition"
+                            src={assets.cancel_icon}
+                            alt="cancel"
+                          />
+                          <img
+                            onClick={() => completeAppointment(item._id)}
+                            className="w-8 cursor-pointer hover:scale-110 transition"
+                            src={assets.tick_icon}
+                            alt="cancel"
+                          />
+                        </div>
                       )}
                     </td>
                   </tr>

@@ -164,13 +164,13 @@ const appointmentCancel = async (req, res) => {
             await appointmentModel.findByIdAndUpdate(appointmentId, { cancelled: true })
             res.status(200).json({
                 success: true,
-                message: "Appointment Completed"
+                message: "Appointment Cancelled"
             });
 
         } else {
             res.status(400).json({
                 success: false,
-                message: "Mark Failed"
+                message: "Cancelled Failed"
             });
         }
 
@@ -183,4 +183,4 @@ const appointmentCancel = async (req, res) => {
 }
 
 
-export { changeAvailablity, allDoctorsList, loginDoctor, appointmentsDoctor };
+export { changeAvailablity, allDoctorsList, loginDoctor, appointmentsDoctor, appointmentsComplete, appointmentCancel };
