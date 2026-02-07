@@ -220,9 +220,16 @@ const adminDashboard = async (req, res) => {
         const user = await userModel.find({});
         const appointments = await appointmentModel.find({});
 
+        const dashdata = {
+            doctors: doctors.length,
+            user: user.length,
+            appointments: appointments.length,
+            latestAppointments: appointments.reverse().reverse().slice(0, 5)
+        }
+
         res.status(200).json({
             success: true,
-            message: "Appointment Cancelled",
+            dashdata
         });
 
     } catch (err) {
