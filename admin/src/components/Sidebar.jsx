@@ -2,10 +2,11 @@ import React, { useContext } from "react";
 import { AdminContext } from "../context/AdminContext";
 import { NavLink } from "react-router-dom";
 import { assets } from "../assets_admin/assets";
+import { doctorContext } from "../context/DoctorContext";
 
 function Sidebar() {
   const { aToken } = useContext(AdminContext);
-
+ const { dToken } = useContext(doctorContext);
   const linkClass = ({ isActive }) =>
     `flex items-center gap-3 px-4 py-2 rounded-lg text-sm font-medium transition
      ${
@@ -41,6 +42,30 @@ function Sidebar() {
             <img src={assets.people_icon} alt="people_icon" className="w-5" />
             <p>Doctor List</p>
           </NavLink>
+        </ul>
+      )}
+
+      {dToken && (
+        <ul className="flex flex-col gap-1 p-4">
+          <NavLink to="/doctor-dashboard" className={linkClass}>
+            <img src={assets.home_icon} alt="home_icon" className="w-5" />
+            <p>Dashboard</p>
+          </NavLink>
+
+          <NavLink to="/doctor-appointments" className={linkClass}>
+            <img
+              src={assets.appointment_icon}
+              alt="appointment_icon"
+              className="w-5"
+            />
+            <p>Appointments</p>
+          </NavLink>
+
+          <NavLink to="/doctor-profile" className={linkClass}>
+            <img src={assets.add_icon} alt="add_icon" className="w-5" />
+            <p>Profile</p>
+          </NavLink>
+
         </ul>
       )}
     </div>
