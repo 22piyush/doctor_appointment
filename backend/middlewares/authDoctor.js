@@ -3,6 +3,10 @@ import jwt from "jsonwebtoken";
 const authDoctor = (req, res, next) => {
     try {
         const { dtoken } = req.headers;
+
+        console.log(req.headers);
+        
+        
         if (!dtoken) {
             return res.status(401).json({
                 success: false,
@@ -12,7 +16,15 @@ const authDoctor = (req, res, next) => {
 
         // Verify token
         const decoded = jwt.verify(dtoken, process.env.JWT_SECRET);
-        req.body.docId = decoded.id
+
+        console.log(decoded , "Decodeddddd");
+
+
+        
+        req.docId = decoded.id
+
+         console.log( req.docId , " req.body.docIdvvvvvvvvvvvvvv");
+
         next();
     } catch (err) {
         return res.status(401).json({
