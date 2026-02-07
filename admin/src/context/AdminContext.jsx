@@ -57,12 +57,34 @@ const AdminContextProvider = (props) => {
       });
 
       if (data.success) {
-         setAppointments(data.appointments)
-      }else{
+        setAppointments(data.appointments);
+      } else {
         return toast.error(data.message);
       }
     } catch (err) {
       return toast.error(err);
+    }
+  };
+
+  const cancelAppointment = async (appointmentId) => {
+    try {
+      const { data } = await axios.post(
+        `${backendUrl}/api/admin/cancel-appointments`,
+        { appointmentId },
+        {
+          headers: { aToken },
+        },
+      );
+
+      if (data.success) {
+        toast.success(data.message);
+        getAllAppointments();
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong");
     }
   };
 
@@ -76,7 +98,8 @@ const AdminContextProvider = (props) => {
     changeAvailability,
     getAllAppointments,
     appointments,
-    setAppointments
+    setAppointments,
+    cancelAppointment,
   };
 
   return (

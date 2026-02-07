@@ -4,6 +4,7 @@ import { v2 as cloudinary } from "cloudinary";
 import doctorModel from "../models/doctorModel.js";
 import jwt from "jsonwebtoken";
 import appointmentModel from "../models/appointModel.js";
+import userModel from "../models/userModel.js";
 
 const addDoctor = async (req, res) => {
     try {
@@ -184,14 +185,6 @@ const appointmentCancel = async (req, res) => {
 
         const appointmentData = await appointmentModel.findById(appointmentId)
 
-        if (appointmentData.userId !== userId) {
-            res.status(400).json({
-                success: false,
-                message: "Unauthorized action",
-            });
-        }
-
-
         await appointmentModel.findByIdAndUpdate(appointmentId, { cancelled: true });
 
         const { docId, slotDate, slotTime } = appointmentData;
@@ -217,5 +210,31 @@ const appointmentCancel = async (req, res) => {
         });
     }
 }
+
+
+const adminDashboard = async (req, res) => {
+
+    try {
+
+        const doctors = await doctorModel.find({});
+        const user = await userModel.find({});
+        const appointments = await appointmentModel.find({});
+
+        res.status(200).json({
+            success: true,
+            message: "Appointment Cancelled",
+        });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({
+            success: false,
+            message: "Server error"
+        });
+    }
+
+}
+
+
 
 export { addDoctor, loginAdmin, allDoctors, appointmentsAdmin, appointmentCancel };

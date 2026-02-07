@@ -1,9 +1,11 @@
 import React, { useContext, useEffect } from "react";
 import { AdminContext } from "../../context/AdminContext";
 import { AppContext } from "../../context/AppContext";
+import { assets } from "../../assets_admin/assets";
 
 function AllAppointments() {
-  const { aToken, getAllAppointments, appointments } = useContext(AdminContext);
+  const { aToken, getAllAppointments, appointments, cancelAppointment } =
+    useContext(AdminContext);
   const { calculateAge } = useContext(AppContext);
 
   useEffect(() => {
@@ -43,7 +45,11 @@ function AllAppointments() {
                     <td className="p-3 ">
                       <div className="flex items-center gap-6">
                         <div className="h-10 rounded-full">
-                          <img src={item.userData.image} alt="doctors" className="h-full"/>
+                          <img
+                            src={item.userData.image}
+                            alt="doctors"
+                            className="h-full"
+                          />
                         </div>
                         <div>
                           <p className="font-medium">{item.userData?.name}</p>
@@ -82,9 +88,12 @@ function AllAppointments() {
                           Completed
                         </span>
                       ) : (
-                        <span className="text-blue-500 font-medium">
-                          Upcoming
-                        </span>
+                        <img
+                          onClick={() => cancelAppointment(item._id)}
+                          className="w-10 cursor-pointer hover:scale-110 transition"
+                          src={assets.cancel_icon}
+                          alt="cancel_icon"
+                        />
                       )}
                     </td>
                   </tr>
