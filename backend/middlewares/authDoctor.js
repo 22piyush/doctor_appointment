@@ -12,14 +12,7 @@ const authDoctor = (req, res, next) => {
 
         // Verify token
         const decoded = jwt.verify(dtoken, process.env.JWT_SECRET);
-
-        if (decoded !== process.env.ADMIN_EMAIL + process.env.ADMIN_PASSWORD) {
-            return res.status(401).json({
-                success: false,
-                message: "NOT AUthorised",
-            });
-        }
-
+        req.body.docId = decoded.id
         next();
     } catch (err) {
         return res.status(401).json({

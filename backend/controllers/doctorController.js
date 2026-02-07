@@ -1,6 +1,7 @@
 import doctorModel from "../models/doctorModel.js";
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
+import appointmentModel from "../models/appointModel.js";
 
 const changeAvailablity = async (req, res) => {
     try {
@@ -60,7 +61,6 @@ const allDoctorsList = async (req, res) => {
     }
 };
 
-
 const loginDoctor = async (req, res) => {
     try {
 
@@ -98,4 +98,25 @@ const loginDoctor = async (req, res) => {
     }
 }
 
-export { changeAvailablity, allDoctorsList, loginDoctor };
+
+const appointmentsDoctor = async (req, res) => {
+    try {
+
+        const { docId } = req.body;
+        const appointments = await appointmentModel.find({ docId })
+
+        res.status(200).json({
+            success: true,
+            appointments
+        });
+
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            message: "Invalid Credentials"
+        });
+    }
+}
+
+
+export { changeAvailablity, allDoctorsList, loginDoctor, appointmentsDoctor };
