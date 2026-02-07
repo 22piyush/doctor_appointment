@@ -210,7 +210,7 @@ const doctorDashboard = async (req, res) => {
         const dashData = {
             earnings,
             appointments,
-            patients,
+            patients:patients.length,
             latestAppointments: appointments.reverse().slice(0, 5)
         }
 
