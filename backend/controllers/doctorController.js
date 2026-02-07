@@ -210,7 +210,7 @@ const doctorDashboard = async (req, res) => {
         const dashData = {
             earnings,
             appointments,
-            patients:patients.length,
+            patients: patients.length,
             latestAppointments: appointments.reverse().slice(0, 5)
         }
 
@@ -228,4 +228,47 @@ const doctorDashboard = async (req, res) => {
 }
 
 
-export { changeAvailablity, allDoctorsList, loginDoctor, appointmentsDoctor, appointmentsComplete, appointmentCancel,doctorDashboard };
+
+const doctorProfile = async (req, res) => {
+    try {
+
+        const docId = req.docId;
+        const profileData = await doctorModel.findById(docId).select("-password");
+
+        res.status(200).json({
+            success: true,
+            profileData
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Invalid Credentials"
+        });
+    }
+}
+
+
+const updateDoctorProfile = async (req, res) => {
+    try {
+
+        const docId = req.docId;
+       const { fees, address, available } = req.body;
+
+       
+
+        res.status(200).json({
+            success: true,
+            profileData
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Invalid Credentials"
+        });
+    }
+}
+
+
+export { changeAvailablity, allDoctorsList, loginDoctor, appointmentsDoctor, appointmentsComplete, appointmentCancel, doctorDashboard, doctorProfile };
