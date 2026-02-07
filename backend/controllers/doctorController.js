@@ -152,5 +152,35 @@ const appointmentsComplete = async (req, res) => {
 }
 
 
+const appointmentCancel = async (req, res) => {
+    try {
+        const docId = req.docId;
+        const { appointmentId } = req.body;
+
+        const appointmentData = await appointmentModel.findById(appointmentId);
+
+        if (appointmentData && appointmentData.docId === docId) {
+
+            await appointmentModel.findByIdAndUpdate(appointmentId, { cancelled: true })
+            res.status(200).json({
+                success: true,
+                message: "Appointment Completed"
+            });
+
+        } else {
+            res.status(400).json({
+                success: false,
+                message: "Mark Failed"
+            });
+        }
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Invalid Credentials"
+        });
+    }
+}
+
 
 export { changeAvailablity, allDoctorsList, loginDoctor, appointmentsDoctor };
