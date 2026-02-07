@@ -109,7 +109,8 @@ function MyAppointments() {
 
               <div className="pt-2">
                 <p className="font-medium">Address</p>
-                <p>{item.docData.address}</p>
+                <p>{item.docData?.address?.line1}</p>
+                <p>{item.docData?.address?.line2}</p>
               </div>
 
               <p className="pt-2">
@@ -140,7 +141,7 @@ function MyAppointments() {
 
             {/* Actions */}
             <div className="flex sm:flex-col gap-3 justify-end">
-              {!item.payment && !item.cancelled && (
+              {!item.payment && !item.cancelled && !item.isCompleted && (
                 <button
                   onClick={() => makePayment(item._id)}
                   className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"

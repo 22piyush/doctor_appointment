@@ -5,7 +5,7 @@ import { ToastContainer } from "react-toastify";
 import { AdminContext } from "./context/AdminContext";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import Dashboard from "./pages/Admin/Dashboard";
 import AllAppointments from "./pages/Admin/AllAppointments";
 import AddDoctor from "./pages/Admin/AddDoctor";
@@ -18,35 +18,75 @@ import DoctorProfile from "./pages/Doctor/DoctorProfile";
 function App() {
   const { aToken } = useContext(AdminContext);
   const { dToken } = useContext(doctorContext);
-  console.log(aToken);
 
-  return aToken || dToken ? (
-    <div className="bg-blue-50">
+  // Not logged in
+  if (!aToken && !dToken) {
+    return (
+      <>
+        <Login />
+        <ToastContainer />
+      </>
+    );
+  }
+
+  return (
+    <div className="bg-blue-50 min-h-screen">
       <ToastContainer />
       <Navbar />
+
       <div className="flex items-start">
         <Sidebar />
-        <Routes>
-          {/* ADMIN ROUTE  */}
-          <Route path="/" element={<></>} />
-          <Route path="/admin-dashboard" element={<Dashboard />} />
-          <Route path="/all-appointments" element={<AllAppointments />} />
-          <Route path="/add-doctor" element={<AddDoctor />} />
-          <Route path="/doctor-list" element={<DoctorList />} />
 
-          {/* DOCTOR ROUTE  */}
-          <Route path="/doctor-dashboard" element={<DoctorDashboard />} />
-          <Route path="/doctor-appointments" element={<DoctorAppointment />} />
-          <Route path="/doctor-profile" element={<DoctorProfile />} />
+        <Routes>
+          {/* DEFAULT REDIRECT */}
+          <Route
+            path="/"
+            element={
+              aToken ? (
+                <Navigate to="/admin-dashboard" replace />
+              ) : (
+                <Navigate to="/doctor-dashboard" replace />
+              )
+            }
+          />
+
+          {/* ADMIN ROUTES */}
+          {aToken && (
+            <>
+              <Route path="/admin-dashboard" element={<Dashboard />} />
+              <Route path="/all-appointments" element={<AllAppointments />} />
+              <Route path="/add-doctor" element={<AddDoctor />} />
+              <Route path="/doctor-list" element={<DoctorList />} />
+            </>
+          )}
+
+          {/* DOCTOR ROUTES */}
+          {dToken && (
+            <>
+              <Route path="/doctor-dashboard" element={<DoctorDashboard />} />
+              <Route
+                path="/doctor-appointments"
+                element={<DoctorAppointment />}
+              />
+              <Route path="/doctor-profile" element={<DoctorProfile />} />
+            </>
+          )}
+
+          {/* FALLBACK */}
+          <Route
+            path="*"
+            element={
+              <Navigate
+                to={aToken ? "/admin-dashboard" : "/doctor-dashboard"}
+                replace
+              />
+            }
+          />
         </Routes>
       </div>
     </div>
-  ) : (
-    <>
-      <Login />
-      <ToastContainer />
-    </>
   );
 }
 
 export default App;
+
